@@ -152,7 +152,7 @@ load_pseudotime<-function(RDS_file,
     stop("Need package RcisTarget")
   }
   if (!requireNamespace("umap")) {
-    stop("Loading package umap")
+    stop("Need package umap")
   }
 
   data("motifAnnotations_hgnc", package="RcisTarget")
