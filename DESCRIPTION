@@ -1,0 +1,23 @@
+Package: BARNO
+Title: Batch-resolved Treatment-associated Regulatory Networks
+Version: 0.1.0
+Authors@R: person("Xi", "Zhang", email = "zhang.xi6@northeastern.edu", role = c("aut", "cre"))
+Description: Weight optimization based on GENIE3.
+License: MIT
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Imports:
+    BiocManager,
+    Seurat,
+    RcisTarget,
+    slingshot,
+    umap,
+    GENIE3,
+    survival,
+    survminer,
+    igraph,
+    reshape2,
+    ggplot2
+    
+    

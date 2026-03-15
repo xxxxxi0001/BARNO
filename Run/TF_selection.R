@@ -1,0 +1,8 @@
+mel_invasive_TRW<-readRDS("TR_Weight_mel_invasive_punished.rds")
+top_genes_mel_invasive<-top_TRweight_genes(mel_invasive_TRW)
+saveRDS(top_genes_mel_invasive,file="Top_TF_of_invasive_melanoma_punished.rds")
+top_tf_Melanocytic<-readRDS("Top_TF_of_Melanocytic_punished.rds")
+head(top_tf_Melanocytic$top_positive_genes,20)
+head(top_tf_Melanocytic$top_negative_genes,20)
+head(top_tf_Melanocytic$top_positive_summary,20)
+head(top_tf_Melanocytic$top_negative_summary,20)

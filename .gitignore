@@ -1,0 +1,7 @@
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user
+.DS_Store
+*.tar.gz
+BARNO.Rcheck/

@@ -1,0 +1,2 @@
+pca_plot_visualization("NONO","Mel.malignant.rds")
+violin_plot_visualization(c("FOS", "NEUROD1", "JUN"),"Mel.malignant.rds","Expression Distribution Across Patient Samples","Transcript Factor with High Panelty Score","High_Penalty")
