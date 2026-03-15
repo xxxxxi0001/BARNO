@@ -62,6 +62,12 @@ https://singlecell.broadinstitute.org/single_cell/study/SCP109/melanoma-immunoth
 
 Users should download the original dataset separately and provide the local file path when running the BARNO pipeline.
 
+* For researcher using this package for their own study, please make sure your data has following features in RDS file:
+
+  1. tpm
+  2. treated: labeled with TRUE/FALSE
+  3. cells
+
 ## Example Workflow
 1. Load Weight
 ```text
