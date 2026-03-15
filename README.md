@@ -94,14 +94,14 @@ head(top_tf_Melanocytic$top_negative_summary,20)
 4. Cox Regression Construction & Choose Important TF
 5. Run KM
 ```text
-weight_matrix_melanocytic<-readRDS("TR_Weight_Melanocytic.rds")
+weight_matrix_melanocytic<-readRDS("TR_Weight_Melanocytic_punished.rds")
 df_cof_melanocytic_STAT1<-select_co_factor(weight_matrix_melanocytic,"STAT1")
 signature_genes<-head(df_cof_melanocytic_STAT1$Gene,10)
 melanocytic_STAT1_fit<-km_curve(signature_genes,"TCGA_SKCM.rds","STAT1")
 ```
 6. Run GRN
 ```text
-weight_matrix_melanocytic<-readRDS("TR_Weight_Melanocytic.rds")
+weight_matrix_melanocytic<-readRDS("TR_Weight_Melanocytic_punished.rds")
 mst_melanocytic_STAT1<-layered_graph("STAT1",weight_matrix_melanocytic)
 directed_mst_visualization(mst_melanocytic_STAT1,"STAT1",aspect_ratio = 0.5,text_size=0.6,text_centrality=0,arrow_size=1)
 ```
