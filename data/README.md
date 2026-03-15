@@ -6,7 +6,7 @@ All genie weight files are provided, which save time for you to run calculated w
 SCP109:
 https://singlecell.broadinstitute.org/single_cell/study/SCP109/melanoma-immunotherapy-resistance
 
-Data I used for 
+Data I used for this study: 
 * Mel: Mel.malignant.rds
 * CD4: Mel.T.CD4.QC.rds
 * CD8: Mel.T.CD8.QC.rds
