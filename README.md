@@ -1,5 +1,6 @@
 # BARNO
 Author E-mail: zhang.xi6@northeastern.edu
+
 **B**atch-**A**ware **R**egulatory **N**etwork **O**ptimization
 
 BARNO is an R package for batch-aware optimization of transcription factor regulatory weights in single-cell transcriptomic analysis. The framework is designed to reduce sample-group-specific or batch-driven transcription factor signals while preserving biologically coherent regulatory structure.
