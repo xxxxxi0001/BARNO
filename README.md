@@ -6,6 +6,7 @@ BARNO is an R package for batch-aware optimization of transcription factor regul
 ## Author E-mail
 zhang.xi6@northeastern.edu
 
+## Pipeline
 <p align="center">
 <img src="figures/pipeline.png" width="800">
 </p>
