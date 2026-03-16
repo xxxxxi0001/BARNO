@@ -7,15 +7,12 @@
 #' 
 #' @return Layered graph
 #' 
-#' @importFrom igraph graph_from_data_frame
 #' @export
 layered_graph<-function(TF, 
                         weight_matrix,
                         layer1_top=10,
                         layer2_top=5){
-  if (!requireNamespace("igraph")) {
-    stop("Need package igraph")
-  }
+
   distance<-weight_matrix$distance_matrix
   distance_df<-as.data.frame(as.table(distance))
   colnames(distance_df) <- c("TF_name", "Target", "TR_Distance")

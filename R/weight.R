@@ -140,20 +140,6 @@ find_best_k_kmean<-function(df_umap,
 #' @export
 load_pseudotime<-function(RDS_file,
                           nstart=10){
-  
-  # load necessary packages for pseudotime
-  if (!requireNamespace("BiocManager")) {
-    stop("Need package BiocManager")
-  }
-  if (!requireNamespace("slingshot")) {
-    stop("Need package slingshot")
-  }
-  if (!requireNamespace("RcisTarget")) {
-    stop("Need package RcisTarget")
-  }
-  if (!requireNamespace("umap")) {
-    stop("Need package umap")
-  }
 
   data("motifAnnotations_hgnc", package="RcisTarget")
   allTFs <- unique(motifAnnotations$TF)
@@ -168,7 +154,7 @@ load_pseudotime<-function(RDS_file,
   message("High Variance Gene Number (with TF): ", length(genes_to_run))
   df_imputated<-pca_knn_imputation(df_tpm,genes_to_run)
   df_imputated_scaled <- scale(df_imputated)
-  suppressMessages({umap_result<-umap(df_imputated_scaled)})
+  suppressMessages({umap_result<-umap::umap(df_imputated_scaled)})
   umap_matrix <- umap_result$layout
   best_k<-find_best_k_kmean(umap_matrix)
   kmean_result<-kmeans(umap_matrix, centers = best_k, nstart = nstart)
@@ -180,7 +166,7 @@ load_pseudotime<-function(RDS_file,
   )
   
   rownames(df_run) <- rownames(df_imputated)
-  slingshot_result<-slingshot(data = umap_matrix, clusterLabels = df_run$clusters, start.clus = '1')
+  slingshot_result<-slingshot::slingshot(data = umap_matrix, clusterLabels = df_run$clusters, start.clus = '1')
   pt_matrix <- slingshot::slingPseudotime(slingshot_result)
   pt_vector <- rowMeans(pt_matrix, na.rm = TRUE)
   df_run$pseudotime<-pt_vector
@@ -205,15 +191,6 @@ load_pseudotime<-function(RDS_file,
 #' @export
 load_state_score<-function(RDS_file,
                            gene_list){
-  if (!requireNamespace("BiocManager")) {
-    stop("Need package BiocManager")
-  }
-  if (!requireNamespace("Seurat")) {
-    stop("Need package Seurat")
-  }
-  if (!requireNamespace("RcisTarget")) {
-    stop("Need package RcisTarget")
-  }
   data("motifAnnotations_hgnc", package="RcisTarget")
   allTFs <- unique(motifAnnotations$TF)
   df<-readRDS(RDS_file)
@@ -223,10 +200,10 @@ load_state_score<-function(RDS_file,
     df_tpm <- t(df_tpm) 
   }
 
-  seurat_object<-CreateSeuratObject(counts=t(df_tpm))
-  seurat_object <- NormalizeData(seurat_object, verbose = FALSE)
+  seurat_object<-Seurat::CreateSeuratObject(counts=t(df_tpm))
+  seurat_object <- Seurat::NormalizeData(seurat_object, verbose = FALSE)
   target_features <- list(toupper(gene_list))
-  seurat_object<-AddModuleScore(seurat_object, features = target_features, name = "Target_Score")
+  seurat_object<-Seurat::AddModuleScore(seurat_object, features = target_features, name = "Target_Score")
   scores<-seurat_object$Target_Score1
   alt_pseudotime<-(max(scores)-scores)/(max(scores)-min(scores))
   hvg_gene<-hvg_selection(df_tpm)
@@ -417,19 +394,13 @@ TR_weight<-function(RDS_file,
   
   message("[2/4] TR_Weight: Loading GENIE3 weight matrix...")
   if (is.null(genie_file)) {
-    if (!requireNamespace("BiocManager")) {
-      stop("Need Package BiocManager")
-    }
-    if (!requireNamespace("GENIE3")) {
-      stop("Need Package GENIE3")
-    }
     message("Preparing run GENIE3, this may takes a while")
     expression_matrix<-as.matrix(t(imputed_matrix))
     data("motifAnnotations_hgnc", package="RcisTarget")
     allTFs <- unique(motifAnnotations$TF)
     inputTFs<-intersect(allTFs, rownames(expression_matrix))
     
-    genie_matrix<-GENIE3(
+    genie_matrix<-GENIE3::GENIE3(
       exprMatrix = expression_matrix,
       regulators=inputTFs,
       nTrees = nTree,
