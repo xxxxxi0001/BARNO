@@ -2,7 +2,7 @@
 % Please edit documentation in R/Visualization.R
 \name{violin_plot_visualization}
 \alias{violin_plot_visualization}
-\title{Construct PCA plot}
+\title{Visualize gene expression across patient samples using violin plots}
 \usage{
 violin_plot_visualization(
   target_genes,
@@ -18,29 +18,29 @@ violin_plot_visualization(
 )
 }
 \arguments{
-\item{RDS_file}{RDS file with tpm}
+\item{target_genes}{Character vector of gene names to visualize.}
 
-\item{Title}{The name you want to set for title}
+\item{RDS_file}{Path to an RDS file containing TPM expression data and sample information.}
 
-\item{Subtitle}{The name you want to set for subtitle}
+\item{Title}{Title of the plot.}
 
-\item{output_name}{The name you want to save this file as}
+\item{Subtitle}{Subtitle of the plot.}
 
-\item{pdf_width}{As parameter name}
+\item{output_name}{File name prefix used for exporting the figure.}
 
-\item{pdf_height}{As parameter name}
+\item{pdf_width}{Width of the exported PDF.}
 
-\item{png_width}{As parameter name}
+\item{pdf_height}{Height of the exported PDF.}
 
-\item{png_height}{As parameter name}
+\item{png_width}{Width of the exported PNG.}
 
-\item{png_resolution}{As parameter name}
+\item{png_height}{Height of the exported PNG.}
 
-\item{target_gene}{Gene name you want to see distribution}
+\item{png_resolution}{Resolution of the exported PNG.}
 }
 \value{
-visualized pca plot
+A violin plot showing gene expression across patient samples.
 }
 \description{
-Construct PCA plot
+Visualize gene expression across patient samples using violin plots
 }

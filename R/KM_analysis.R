@@ -44,33 +44,29 @@ km_curve<-function(signature_genes,
                    patient_RDS,
                    TF,
                    cut="median") {
-  if (!requireNamespace("survival")) {
-    stop("Need package survival")
-  }
-  if (!requireNamespace("survminer")) {
-    stop("Need package survminer")
-  }
 
   real<-readRDS(patient_RDS)
-  real_expression<-real$tpm[intersect(signature_genes, rownames(real$tpm)), ]
+  real_expression<-real$tpm[intersect(signature_genes, rownames(real$tpm)), , drop = FALSE]
+  if (length(real_expression) == 0) {
+    stop("None of the signature_genes were found in the expression matrix.")
+  }
   normalized_expression<-t(scale(t(log2(real_expression + 1))))
-
   survival_df<-data.frame(
     time=as.numeric(real$survival[, 1]),
     status=as.numeric(real$survival[, 2]),
     score=colMeans(normalized_expression)
   )
   if (cut!="median"){
-    res.cut<-surv_cutpoint(survival_df, time = "time", event = "status", variables = "score")
-    survival_df <- surv_categorize(res.cut)
-    km_fit <- survfit(Surv(time, status) ~ score, data = survival_df)
+    res.cut<-survminer::surv_cutpoint(survival_df, time = "time", event = "status", variables = "score")
+    survival_df <- survminer::surv_categorize(res.cut)
+    km_fit <- survival::survfit(survival::Surv(time, status) ~ score, data = survival_df)
     
   } else {
-    median_score<-median(survival_df$score, na.rm=TRUE)
+    median_score<-stats::median(survival_df$score, na.rm=TRUE)
     survival_df$score_group<-ifelse(survival_df$score >= median_score, "High", "Low")
     survival_df$score_group<-factor(survival_df$score_group, levels = c("High", "Low"))
 
-    km_fit<-survfit(Surv(time, status) ~ score_group, data = survival_df)
+    km_fit<-survival::survfit(survival::Surv(time, status) ~ score_group, data = survival_df)
   }
   
   

@@ -2,7 +2,7 @@
 % Please edit documentation in R/Visualization.R
 \name{directed_mst_visualization}
 \alias{directed_mst_visualization}
-\title{Construct km-curve}
+\title{Visualize a directed regulatory cascade}
 \usage{
 directed_mst_visualization(
   directed_mst,
@@ -28,9 +28,9 @@ directed_mst_visualization(
 )
 }
 \arguments{
-\item{directed_mst}{Genes selected for km construction}
+\item{directed_mst}{A directed igraph object representing the regulatory cascade.}
 
-\item{TF}{RDS with survival & patient info}
+\item{TF}{Parent transcription factor used as the root node.}
 
 \item{pdf_width}{As parameter name}
 
@@ -72,5 +72,5 @@ directed_mst_visualization(
 GRN graph
 }
 \description{
-Construct km-curve
+Visualize a directed regulatory cascade
 }
