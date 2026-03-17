@@ -1,4 +1,5 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19058450.svg)](https://doi.org/10.5281/zenodo.19058450)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19076687.svg)](https://doi.org/10.5281/zenodo.19076687)
 # BARNO 
 **B**atch-**A**ware **R**egulatory **N**etwork **O**ptimization
 
@@ -6,6 +7,14 @@ BARNO is an R package for batch-aware optimization of transcription factor regul
 
 ## Author E-mail
 zhang.xi6@northeastern.edu
+
+## 📄 Preprint
+
+The BARNO framework is described in our preprint:
+
+**BARNO: a batch-aware regulatory network optimization framework reveals a RAN-ENO1-NONO core in melanoma**
+
+DOI: https://doi.org/10.5281/zenodo.19076687
 
 ## Pipeline
 <p align="center">
