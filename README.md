@@ -1,3 +1,4 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19058450.svg)](https://doi.org/10.5281/zenodo.19058450)
 # BARNO 
 **B**atch-**A**ware **R**egulatory **N**etwork **O**ptimization
 
