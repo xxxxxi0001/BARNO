@@ -1,11 +1,11 @@
 #' Use loess select high variance gene
 #'
 #' @param df Data frame with gene expression
-#' @param p_value Threshold for variance gene 
+#' @param p_value Threshold for variance gene
 #' @param span Loess
-#' 
+#'
 #' @return All high variance gene
-#' 
+#'
 #' @export
 hvg_selection<-function (df,
                          p_value=0.2,
@@ -19,7 +19,7 @@ hvg_selection<-function (df,
   mean_var_gene$Variance_log10<-log10(mean_var_gene$Variance+1)
 
   loess_model<-loess(Variance_log10~Mean_log10, data=mean_var_gene, span=span)
-  
+
   mean_var_gene$Expected_Variance<-loess_model$fitted
 
   mean_var_gene$Residual<-mean_var_gene$Variance_log10-mean_var_gene$Expected_Variance
@@ -38,9 +38,9 @@ hvg_selection<-function (df,
 #' @param df Data frame with gene expression
 #' @param hvg_list High variance gene calculate before
 #' @param k The number of k you choose for knn imputation
-#' 
+#'
 #' @return Imputated expression data frame
-#' 
+#'
 #' @export
 pca_knn_imputation<-function (df,
                               hvg_list,
@@ -70,9 +70,9 @@ pca_knn_imputation<-function (df,
       df_hvg[i,zeros]<-colMeans(neighbor)
     }
   }
-  
+
   message("After Imputation: ", sum(df_hvg == 0), " zeros.")
-  
+
   return(df_hvg)
 }
 
@@ -81,11 +81,11 @@ pca_knn_imputation<-function (df,
 #' @param df_umap UMAP data frame
 #' @param test_k Number of k you wanna test
 #' @param nstart K-mean clustering parameter
-#' 
+#'
 #' @return Best k
-#' 
+#'
 #' @export
-find_best_k_kmean<-function(df_umap, 
+find_best_k_kmean<-function(df_umap,
                             test_k=10,
                             nstart=10) {
   best_k <- 2
@@ -132,11 +132,11 @@ find_best_k_kmean<-function(df_umap,
 
 #' Calculate pseudotime for cell progression
 #'
-#' @param RDS_file RDS file with tpm 
+#' @param RDS_file RDS file with tpm
 #' @param nstart K-mean clustering parameter
-#' 
+#'
 #' @return Pseudotime
-#' 
+#'
 #' @export
 load_pseudotime<-function(RDS_file,
                           nstart=10){
@@ -146,7 +146,7 @@ load_pseudotime<-function(RDS_file,
   df<-readRDS(RDS_file)
   df_tpm<-df$tpm
   if (nrow(df_tpm) != length(df$cells)) {
-    df_tpm <- t(df_tpm) 
+    df_tpm <- t(df_tpm)
   }
   hvg_gene<-hvg_selection(df_tpm)
 
@@ -164,16 +164,16 @@ load_pseudotime<-function(RDS_file,
     clusters = as.character(kmean_result$cluster),
     treated=df$treated
   )
-  
+
   rownames(df_run) <- rownames(df_imputated)
   slingshot_result<-slingshot::slingshot(data = umap_matrix, clusterLabels = df_run$clusters, start.clus = '1')
   pt_matrix <- slingshot::slingPseudotime(slingshot_result)
   pt_vector <- rowMeans(pt_matrix, na.rm = TRUE)
   df_run$pseudotime<-pt_vector
   df_run <- df_run[!is.na(df_run$pseudotime), ]
-  
+
   message(length(df$cells)-nrow(df_run), " cells are droped in pseudotime calculation.")
-  
+
   return(list(
     meta_data=df_run,
     imputed_matrix=df_imputated,
@@ -183,11 +183,11 @@ load_pseudotime<-function(RDS_file,
 
 #' Calculate state score as pseudo-pseudotime for cell progression
 #'
-#' @param RDS_file RDS file with tpm 
+#' @param RDS_file RDS file with tpm
 #' @param gene_list A list of gene that represent your selection of cell type
-#' 
+#'
 #' @return Pseudo-pseudotime
-#' 
+#'
 #' @export
 load_state_score<-function(RDS_file,
                            gene_list){
@@ -197,7 +197,7 @@ load_state_score<-function(RDS_file,
   df_tpm<-df$tpm
 
   if (nrow(df_tpm) != length(df$cells)) {
-    df_tpm <- t(df_tpm) 
+    df_tpm <- t(df_tpm)
   }
 
   seurat_object<-Seurat::CreateSeuratObject(counts=t(df_tpm))
@@ -210,13 +210,13 @@ load_state_score<-function(RDS_file,
   genes_to_run <- intersect(unique(c(hvg_gene, allTFs)), colnames(df_tpm))
   message("High Variance Gene Number (with TF): ", length(genes_to_run))
   df_imputated<-pca_knn_imputation(df_tpm,genes_to_run)
-  
+
   df_run<-data.frame(
     treated=df$treated,
     pseudotime=alt_pseudotime,
     row.names=rownames(df_tpm)
   )
-  
+
   return(list(
     meta_data=df_run,
     imputed_matrix=df_imputated,
@@ -229,9 +229,9 @@ load_state_score<-function(RDS_file,
 #' @param loess_fit The loess construct before
 #' @param x Gene expression
 #' @param y Seurat Score
-#' 
+#'
 #' @return Peak of loess
-#' 
+#'
 #' @export
 find_peak<-function(loess_fit,
                     x,
@@ -251,7 +251,7 @@ find_peak<-function(loess_fit,
 #' @export
 dynamic_weight_initialization<-function(meta_data,
                                         imputed_matrix){
-  
+
   genes <- colnames(imputed_matrix)
   results<-data.frame(
     gene=genes,
@@ -295,9 +295,9 @@ dynamic_weight_initialization<-function(meta_data,
 #' @param threshold Threshold set for portion
 #' @param alpha Penalty degree
 #' @param amplify Amplification degree of portion
-#' 
+#'
 #' @return Penalty score of batch effect
-#' 
+#'
 #' @export
 penalty_score_batch_effect<-function(tf_expression,
                                      pca_coordinates,
@@ -330,9 +330,9 @@ penalty_score_batch_effect<-function(tf_expression,
 #' @param threshold Threshold set for portion
 #' @param alpha Penalty degree
 #' @param amplify Amplification degree of portion
-#' 
+#'
 #' @return Penalty score of batch effect
-#' 
+#'
 #' @export
 generate_penalty_score<-function(genie_matrix,
                                  df_tpm,
@@ -364,58 +364,14 @@ generate_penalty_score<-function(genie_matrix,
 
 #' Caculate weight by calling previous function one by one
 #'
-#' @param RDS_file RDS file with treated T/F, tpm
-#' @param gene_list List of gene selected for scoring
-#' @param genie_file If genie calculated before, import file
-#' @param batch_effect Whether select slingshot or seurat
-#' @param alpha Penalty degree
-#' @param nTree Number of tree for genie3
-#' @param nCores Number of core for genie3
-#' 
-#' @return Weight matrix and other additional info might be useful
-#' 
+#' @param genie_matrix Genie weight matrix that generated from GENIE3
+#' @param dynamic_matrix Dynamic weight matrix that contain all necessary information for dynamic weight calculation
+#' @param alpha Time penalty degree
+#'
+#' @return Calculated weight matrix
+#'
 #' @export
-TR_weight<-function(RDS_file,
-                    gene_list,
-                    genie_file=NULL,
-                    batch_effect=TRUE,
-                    alpha=0.5,
-                    nTree=500,
-                    nCores=1){
-  
-  message("[1/4] TR_Weight: Loading Pseudotime...")
-  
-  if (batch_effect) {
-    result <- load_state_score(RDS_file,gene_list)
-  }else {result<-load_pseudotime(RDS_file)}
-  
-  meta_data<-result$meta_data
-  imputed_matrix<-result$imputed_matrix
-  
-  message("[2/4] TR_Weight: Loading GENIE3 weight matrix...")
-  if (is.null(genie_file)) {
-    message("Preparing run GENIE3, this may takes a while")
-    expression_matrix<-as.matrix(t(imputed_matrix))
-    data("motifAnnotations_hgnc", package="RcisTarget")
-    allTFs <- unique(motifAnnotations$TF)
-    inputTFs<-intersect(allTFs, rownames(expression_matrix))
-    
-    genie_matrix<-GENIE3::GENIE3(
-      exprMatrix = expression_matrix,
-      regulators=inputTFs,
-      nTrees = nTree,
-      nCores = nCores,
-      verbose=TRUE)
-    saveRDS(genie_matrix,file="genie_matrix.rds")
-  }
-  else {genie_matrix<-readRDS(genie_file)}
-  
-  message("[3/4] TR_Weight: Initializing dynamix weight matrix...")
-
-  dynamic_matrix<-dynamic_weight_initialization(meta_data,imputed_matrix)
-  
-  message("[4/4] TR_Weight: Constructing Dynamic Weight Matrix...")
-
+weight_construction<-function(genie_matrix,dynamic_matrix,alpha){
   tf_names <- rownames(genie_matrix)
   target_names <- colnames(genie_matrix)
 
@@ -444,6 +400,64 @@ TR_weight<-function(RDS_file,
   weight_treated<-scale(weight_treated)
   weight_untreated<-scale(weight_untreated)
   TR_weight_matrix<-weight_treated-weight_untreated
+  return(TR_weight_matrix)
+}
+
+#' Caculate weight by calling previous function one by one
+#'
+#' @param RDS_file RDS file with treated T/F, tpm
+#' @param gene_list List of gene selected for scoring
+#' @param genie_file If genie calculated before, import file
+#' @param batch_effect Whether select slingshot or seurat
+#' @param alpha Penalty degree
+#' @param nTree Number of tree for genie3
+#' @param nCores Number of core for genie3
+#'
+#' @return Weight matrix and other additional info might be useful
+#'
+#' @export
+TR_weight<-function(RDS_file,
+                    gene_list,
+                    genie_file=NULL,
+                    batch_effect=TRUE,
+                    alpha=0.5,
+                    nTree=500,
+                    nCores=1){
+
+  message("[1/4] BARNO: Loading Pseudotime...")
+
+  if (batch_effect) {
+    result <- load_state_score(RDS_file,gene_list)
+  }else {result<-load_pseudotime(RDS_file)}
+
+  meta_data<-result$meta_data
+  imputed_matrix<-result$imputed_matrix
+
+  message("[2/4] BARNO: Loading GENIE3 weight matrix...")
+  if (is.null(genie_file)) {
+    message("Preparing run GENIE3, this may takes a while")
+    expression_matrix<-as.matrix(t(imputed_matrix))
+    data("motifAnnotations_hgnc", package="RcisTarget")
+    allTFs <- unique(motifAnnotations$TF)
+    inputTFs<-intersect(allTFs, rownames(expression_matrix))
+
+    genie_matrix<-GENIE3::GENIE3(
+      exprMatrix = expression_matrix,
+      regulators=inputTFs,
+      nTrees = nTree,
+      nCores = nCores,
+      verbose=TRUE)
+    saveRDS(genie_matrix,file="genie_matrix.rds")
+  }
+  else {genie_matrix<-readRDS(genie_file)}
+
+  message("[3/4] BARNO: Initializing dynamix weight matrix...")
+
+  dynamic_matrix<-dynamic_weight_initialization(meta_data,imputed_matrix)
+
+  message("[4/4] BARNO: Constructing Dynamic Weight Matrix...")
+
+  TR_weight_matrix<-weight_construction(genie_matrix,dynamic_matrix,alpha)
 
   if(batch_effect){
     message("Punishing TF with Batch Effect...")
@@ -453,7 +467,7 @@ TR_weight<-function(RDS_file,
     TR_weight_matrix<-sweep(TR_weight_matrix,1,penalty_aligned, "*")
   }
   distance_matrix<-1/(abs(TR_weight_matrix)+1e-6)
-  
+
   return(list(
     TR_weight_matrix=TR_weight_matrix,
     distance_matrix=distance_matrix,
@@ -467,9 +481,9 @@ TR_weight<-function(RDS_file,
 #' Get top expressed TF based on previously calculated weight
 #'
 #' @param weight_matrix Weight matrix you calculated before
-#' 
+#'
 #' @return Top expressed TF
-#' 
+#'
 #' @export
 top_TRweight_genes<-function(weight_matrix){
   tr_matrix <- weight_matrix$TR_weight_matrix
@@ -483,7 +497,7 @@ top_TRweight_genes<-function(weight_matrix){
   neg<-tr_df[tr_df$TR_Weight<0,]
   tf_neg_summary<-aggregate(TR_Weight ~ TF, data = neg, sum)
   tf_neg_summary<-tf_neg_summary[order(tf_neg_summary$TR_Weight, decreasing = FALSE), ]
-  
+
   return(list(
     top_positive_genes=top_pos,
     top_negative_genes=top_neg,
