@@ -82,6 +82,7 @@ Users should download the original dataset separately and provide the local file
 
 ## Example Workflow (for this study)
 1. Load Weight
+   
 1). with Batch Effect
 ```r
 set.seed(123)
