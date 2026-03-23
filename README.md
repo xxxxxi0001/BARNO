@@ -81,7 +81,8 @@ Users should download the original dataset separately and provide the local file
   3. cells
 
 ## Example Workflow (for this study)
-1. 1). Load Weight (with Batch Effect)
+1. Load Weight
+1). with Batch Effect
 ```r
 set.seed(123)
 melanocytic_genes <- c("TYR", "DCT", "MLANA", "PMEL", "MITF", "SOX10", "MIA", "GPNMB", "S100B", "ERBB3")
@@ -89,7 +90,7 @@ weight_matrix_melanocytic<-TR_weight("Mel.malignant.rds", # parameter RDS_file
                                       melanocytic_genes, # parameter gene_list
                                       genie_file = "genie_matrix.rds") # parameter genie_file, if NULL, run GENIE3 automatically
 ```
-   2). Load Weight (without Batch Effect)
+2). without Batch Effect
 ```r
 set.seed(123)
 weight_matrix_melanocytic<-TR_weight("Mel.malignant.rds", # parameter RDS_file
