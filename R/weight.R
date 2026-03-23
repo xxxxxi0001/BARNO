@@ -417,7 +417,7 @@ weight_construction<-function(genie_matrix,dynamic_matrix,alpha){
 #'
 #' @export
 TR_weight<-function(RDS_file,
-                    gene_list,
+                    gene_list=NULL,
                     genie_file=NULL,
                     batch_effect=TRUE,
                     alpha=0.5,
@@ -465,17 +465,24 @@ TR_weight<-function(RDS_file,
     penalty_df<-generate_penalty_score(genie_matrix,df_tpm)
     penalty_aligned<-penalty_df$panelty_score[match(rownames(TR_weight_matrix), penalty_df$TF)]
     TR_weight_matrix<-sweep(TR_weight_matrix,1,penalty_aligned, "*")
+    distance_matrix<-1/(abs(TR_weight_matrix)+1e-6)
+    return(list(
+      TR_weight_matrix=TR_weight_matrix,
+      distance_matrix=distance_matrix,
+      meta_data=meta_data,
+      imputed_matrix=imputed_matrix,
+      penalty_df=penalty_df
+    ))
+  } else{
+    distance_matrix<-1/(abs(TR_weight_matrix)+1e-6)
+    return(list(
+      TR_weight_matrix=TR_weight_matrix,
+      distance_matrix=distance_matrix,
+      meta_data=meta_data,
+      imputed_matrix=imputed_matrix
+    )
+    )
   }
-  distance_matrix<-1/(abs(TR_weight_matrix)+1e-6)
-
-  return(list(
-    TR_weight_matrix=TR_weight_matrix,
-    distance_matrix=distance_matrix,
-    meta_data=meta_data,
-    imputed_matrix=imputed_matrix,
-    penalty_df=penalty_df
-  )
-  )
 }
 
 #' Get top expressed TF based on previously calculated weight

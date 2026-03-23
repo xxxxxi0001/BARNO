@@ -6,7 +6,7 @@
 \usage{
 TR_weight(
   RDS_file,
-  gene_list,
+  gene_list = NULL,
   genie_file = NULL,
   batch_effect = TRUE,
   alpha = 0.5,
