@@ -25,6 +25,10 @@ DOI: https://doi.org/10.5281/zenodo.19076687
 <img src="figures/calculation.png" width="800">
 </p>
 
+<p align="center">
+<img src="figures/calculation2.png" width="800">
+</p>
+
 ## Overview
 
 BARNO builds on GENIE3-based regulatory network inference and refines transcription factor–target gene weights by integrating:
