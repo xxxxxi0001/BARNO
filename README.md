@@ -14,7 +14,7 @@ The BARNO framework is described in our preprint:
 
 **BARNO: a batch-aware regulatory network optimization framework reveals a RAN-ENO1-NONO core in melanoma**
 
-DOI: https://doi.org/10.5281/zenodo.19076687
+DOI: https://doi.org/10.21203/rs.3.rs-9142292/v1
 
 ## Pipeline
 <p align="center">
