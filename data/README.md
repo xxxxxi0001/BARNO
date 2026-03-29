@@ -1,5 +1,5 @@
 # Data
-The full datasets used in this study are too large to be distributed directly in this repository. Example calculated data is provided except CD8 (file too big).
+The full datasets used in this study are too large to be distributed directly in this repository. 
 All genie weight files are provided, which save time for you to run calculated weight by yourself~ 
 
 ## Original data source
@@ -12,3 +12,5 @@ Data I used for this study:
 * CD8: Mel.T.CD8.QC.rds
 * Validation: public.ICB.datasets.rds & TCGA_SKCM.rds
 
+## All Data and Run Example (except original data set from SCP109) are archived in zenodo
+https://doi.org/10.5281/zenodo.19301264
