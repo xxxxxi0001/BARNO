@@ -1,6 +1,6 @@
 # Data
 The full datasets used in this study are too large to be distributed directly in this repository. 
-All genie weight files are provided, which save time for you to run calculated weight by yourself~ 
+All genie weight files are provided (separately for CD4, CD8, Mel), which save time for you to run calculated weight by yourself~ 
 
 ## Original data source
 SCP109:
