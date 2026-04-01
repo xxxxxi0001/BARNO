@@ -371,7 +371,9 @@ generate_penalty_score<-function(genie_matrix,
 #' @return Calculated weight matrix
 #'
 #' @export
-weight_construction<-function(genie_matrix,dynamic_matrix,alpha){
+weight_construction<-function(genie_matrix,
+                              dynamic_matrix,
+                              alpha){
   tf_names <- rownames(genie_matrix)
   target_names <- colnames(genie_matrix)
 
