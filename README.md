@@ -67,12 +67,12 @@ BARNO/
 
 ## Installation
 You can install BARNO from GitHub using devtools:
-```text
+```r
 install.packages("devtools")
 devtools::install_github("xxxxxi0001/BARNO")
 ```
 Then load the package:
-```text
+```r
 library(BARNO)
 ```
 
