@@ -5,7 +5,8 @@
 # BARNO 
 **B**reath-**A**ware **R**egulatory **N**etwork **O**ptimization
 
-BARNO is an R package for batch-aware optimization of transcription factor regulatory weights in single-cell transcriptomic analysis. The framework is designed to reduce sample-group-specific or batch-driven transcription factor signals while preserving biologically coherent regulatory structure.
+BARNO is an R package for Breadth-Aware Regulatory Network Optimization, a GENIE3-based framework for candidate regulatory prioritization. 
+
 
 ## Author E-mail
 zhang.xi6@northeastern.edu
@@ -14,7 +15,7 @@ zhang.xi6@northeastern.edu
 
 The BARNO framework is described in our preprint:
 
-**BARNO: a batch-aware regulatory network optimization framework reveals a RAN-ENO1-NONO core in melanoma**
+**BARNO breadth aware regulatory prioritization identifies a survival associated gene signature in melanoma**
 
 DOI: https://doi.org/10.21203/rs.3.rs-9142292/v1
 
@@ -42,12 +43,12 @@ BARNO builds on GENIE3-based regulatory network inference and refines transcript
 - regulatory importance from GENIE3
 - transcription factor–target gene correlation
 - temporal consistency inferred from transcriptional scoring
-- batch-aware penalization based on spatial dispersion in PCA space
+- breadth-aware penalization based on spatial dispersion in PCA space
 
 Using this framework, BARNO supports:
 
 - construction of regulatory weight matrices
-- batch-aware regulator prioritization
+- breadth-aware regulator prioritization
 - survival-associated module selection
 - core regulator identification
 - layered gene regulatory network (GRN) reconstruction
